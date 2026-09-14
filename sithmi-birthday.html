@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Sithmi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #fdf6f1;
+    --blush: #f4d4d9;
+    --rose: #a63a5a;
+    --wine: #5c2338;
+    --plum: #3a1f2b;
+    --gold: #c9a15b;
+    --line: rgba(58,31,43,0.14);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: linear-gradient(120deg, var(--cream), #fbe9ec, var(--cream));
+    background-size: 300% 300%;
+    animation: bgPulse 18s ease-in-out infinite;
+    color: var(--plum);
+    font-family:'Jost', sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+    position:relative;
+  }
+  @keyframes bgPulse{
+    0%,100%{ background-position: 0% 50%; }
+    50%{ background-position: 100% 50%; }
+  }
+
+  .sparkle{
+    position:fixed;
+    z-index:9999;
+    pointer-events:none;
+    font-size:14px;
+    color: var(--rose);
+    animation: sparkleFade 0.9s ease-out forwards;
+  }
+  @keyframes sparkleFade{
+    0%{ opacity:1; transform: translateY(0) scale(1) rotate(0deg); }
+    100%{ opacity:0; transform: translateY(-30px) scale(0.4) rotate(50deg); }
+  }
+
+  .heart{
+    position:absolute;
+    bottom:-5%;
+    color: var(--rose);
+    opacity:0.5;
+    animation: floatUp linear infinite;
+    font-size: 16px;
+  }
+  @keyframes floatUp{
+    0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity:0.55; }
+    90%{ opacity:0.4; }
+    100%{ transform: translateY(-110vh) translateX(30px) rotate(25deg); opacity:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  h1,h2,h3,.serif{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    color: var(--wine);
+  }
+
+  a{ color:inherit; }
+
+  /* Floating petals — sparse, ambient, not on every element */
+  #petal-field{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+    overflow:hidden;
+  }
+  .petal{
+    position:absolute;
+    top:-5%;
+    width:14px;
+    height:14px;
+    background: var(--blush);
+    border-radius: 0 60% 0 60%;
+    opacity:0.65;
+    animation: drift linear infinite;
+  }
+  @keyframes drift{
+    0%{ transform: translateY(-5vh) translateX(0) rotate(0deg); }
+    100%{ transform: translateY(110vh) translateX(40px) rotate(240deg); }
+  }
+
+  section{
+    position:relative;
+    z-index:2;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding: 6rem 1.5rem;
+    text-align:center;
+  }
+
+  /* ---------- HERO / ENVELOPE ---------- */
+  #hero{
+    min-height:100vh;
+  }
+
+  .eyebrow-free-label{
+    font-family:'Jost', sans-serif;
+    font-size:0.95rem;
+    letter-spacing:0.03em;
+    color: var(--rose);
+    margin-bottom:1.2rem;
+  }
+
+  .envelope-wrap{
+    perspective: 1400px;
+    margin-top: 2.5rem;
+  }
+
+  .envelope{
+    position:relative;
+    width: min(320px, 82vw);
+    height: min(210px, 54vw);
+    cursor:pointer;
+    touch-action: manipulation;
+    transform-style: preserve-3d;
+  }
+
+  .envelope-body{
+    position:absolute;
+    inset:0;
+    background: linear-gradient(180deg, #ffffff, var(--blush));
+    border:1px solid var(--line);
+    border-radius:6px;
+    box-shadow: 0 24px 50px -18px rgba(92,35,56,0.35);
+    z-index:0;
+  }
+
+  /* static interior lining, revealed once the flap folds away */
+  .envelope-shadow-flap{
+    position:absolute;
+    top:0; left:0; width:100%; height:56%;
+    background: var(--wine);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    border-radius: 6px 6px 0 0;
+    z-index:1;
+  }
+
+  .envelope-flap{
+    position:absolute;
+    top:0; left:0; width:100%; height:56%;
+    background: var(--rose);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    border-radius: 6px 6px 0 0;
+    transform-origin: top center;
+    transform: rotateX(0deg);
+    backface-visibility: hidden;
+    transition: transform 0.9s cubic-bezier(.6,0,.3,1);
+    z-index:3;
+  }
+  .envelope.open .envelope-flap{
+    transform: rotateX(-180deg);
+  }
+
+  .envelope-seal{
+    position:absolute;
+    top: 32%; left:50%;
+    transform: translate(-50%,-50%);
+    width: 15%;
+    aspect-ratio: 1;
+    min-width: 34px;
+    min-height: 34px;
+    border-radius:50%;
+    background: var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff;
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.3rem;
+    z-index:4;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    backface-visibility: hidden;
+  }
+  .envelope.open .envelope-seal{ opacity:0; transform: translate(-50%,-50%) scale(0.4); }
+
+  .letter{
+    position:absolute;
+    left:6%; right:6%;
+    bottom:6%;
+    height:82%;
+    background: #fffefb;
+    border:1px solid var(--line);
+    border-radius:4px;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 1.2rem;
+    transform: translateY(6%);
+    transition: transform 0.9s cubic-bezier(.6,0,.3,1) 0.25s;
+  }
+  .envelope.open .letter{
+    transform: translateY(-62%);
+  }
+  .letter p{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color: var(--wine);
+    font-size: clamp(0.9rem, 3.2vw, 1.05rem);
+  }
+
+  .envelope-hint{
+    margin-top:1.6rem;
+    font-size:0.85rem;
+    color: var(--rose);
+    letter-spacing:0.02em;
+  }
+
+  .hero-eyebrow{
+    font-family:'Jost', sans-serif;
+    font-size:1rem;
+    letter-spacing:0.04em;
+    color: var(--rose);
+    margin-bottom:0.6rem;
+  }
+
+  h1.hero-title{
+    font-size: clamp(4.2rem, 17vw, 9.5rem);
+    line-height:0.95;
+    font-style:italic;
+    background: linear-gradient(100deg, var(--wine), var(--rose) 40%, var(--gold) 65%, var(--rose) 90%);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: nameShimmer 6s ease-in-out infinite;
+  }
+  @keyframes nameShimmer{
+    0%,100%{ background-position: 0% center; }
+    50%{ background-position: 100% center; }
+  }
+
+  .hero-sub{
+    margin-top:1.4rem;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    color: var(--wine);
+    animation: pulseSoft 2.6s ease-in-out infinite;
+  }
+  @keyframes pulseSoft{
+    0%,100%{ opacity:0.85; transform:scale(1); }
+    50%{ opacity:1; transform:scale(1.03); }
+  }
+
+  /* ---------- MESSAGE ---------- */
+  #message p{
+    max-width: 60ch;
+    font-size: 1.15rem;
+    line-height:1.85;
+    margin: 0 auto 1.3rem;
+  }
+  #message .sign-off{
+    margin-top:2rem;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.4rem;
+    color: var(--rose);
+  }
+
+  /* ---------- REASONS ---------- */
+  #reasons{
+    align-items:stretch;
+    text-align:left;
+  }
+  .reasons-inner{
+    max-width: 640px;
+    margin: 0 auto;
+    width:100%;
+  }
+  #reasons h2{ text-align:center; margin-bottom:2.6rem; font-size:2.4rem; }
+
+  .reason-row{
+    display:flex;
+    gap:1.4rem;
+    align-items:flex-start;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .reason-row:first-of-type{ border-top: 1px solid var(--line); }
+
+  .reason-mark{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color: var(--gold);
+    font-size:1.5rem;
+    flex-shrink:0;
+    width: 2ch;
+  }
+  .reason-text{
+    font-size:1.05rem;
+    line-height:1.65;
+    padding-top:0.15rem;
+  }
+
+  /* ---------- GALLERY ---------- */
+  #gallery h2{ margin-bottom: 2.6rem; font-size:2.4rem; }
+  .gallery-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.4rem;
+    max-width: 720px;
+    width:100%;
+  }
+  .flip-card{
+    perspective: 1000px;
+    height: 190px;
+  }
+  .flip-inner{
+    position:relative;
+    width:100%; height:100%;
+    transition: transform 0.8s cubic-bezier(.6,0,.3,1);
+    transform-style: preserve-3d;
+  }
+  .flip-card:hover .flip-inner, .flip-card.flipped .flip-inner{
+    transform: rotateY(180deg);
+  }
+  .flip-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.05rem;
+    padding: 1rem;
+    text-align:center;
+  }
+  .flip-front{
+    background: linear-gradient(160deg, var(--blush), #fff);
+    border: 1px solid var(--line);
+    color: var(--rose);
+    font-size:2rem;
+    font-style:italic;
+  }
+  .flip-back{
+    background: var(--rose);
+    color: #fff;
+    transform: rotateY(180deg);
+    font-style:italic;
+  }
+
+  /* ---------- LOVE METER ---------- */
+  #meter .meter-track{
+    width: min(420px, 82vw);
+    height: 14px;
+    border-radius: 20px;
+    background: var(--blush);
+    margin: 2.2rem auto 1rem;
+    overflow:hidden;
+    border: 1px solid var(--line);
+  }
+  #meter .meter-fill{
+    height:100%;
+    width:0%;
+    border-radius:20px;
+    background: linear-gradient(90deg, var(--rose), var(--gold));
+    transition: width 2.4s cubic-bezier(.2,.8,.2,1);
+  }
+  #meter .meter-label{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color: var(--wine);
+    font-size:1.15rem;
+    min-height:1.6rem;
+  }
+  #meter button{
+    margin-top:1.6rem;
+    font-family:'Jost', sans-serif;
+    font-size:0.95rem;
+    letter-spacing:0.02em;
+    background: var(--rose);
+    color:#fff;
+    border:none;
+    padding: 0.85rem 1.8rem;
+    border-radius: 40px;
+    cursor:pointer;
+    transition: transform 0.25s ease, background 0.25s ease;
+  }
+  #meter button:hover{ background: var(--wine); transform: translateY(-2px); }
+  #meter button:active{ transform: translateY(0); }
+
+  /* ---------- WISH / CANDLE ---------- */
+  #wish{
+    background: linear-gradient(180deg, var(--cream), #fbe9ec);
+  }
+
+  .cake{
+    margin: 1.5rem auto 0;
+    position:relative;
+    width: min(220px, 62vw);
+  }
+  .cake-layer{
+    background: var(--rose);
+    border-radius: 10px;
+    height:70px;
+    box-shadow: inset 0 -10px 0 rgba(0,0,0,0.08);
+  }
+  .cake-layer.top{ background: var(--blush); height:50px; margin-top:6px; border-radius:10px; }
+  .cake-plate{
+    height:12px;
+    background: var(--gold);
+    border-radius:50%;
+    margin-top:6px;
+  }
+
+  .candle{
+    position:absolute;
+    top:-46px;
+    left:50%;
+    transform: translateX(-50%);
+    width:8px;
+    height:46px;
+    background: repeating-linear-gradient(180deg, #fff, #fff 6px, var(--rose) 6px, var(--rose) 12px);
+    border-radius:3px;
+  }
+  .flame{
+    position:absolute;
+    top:-22px;
+    left:50%;
+    transform: translateX(-50%);
+    width:14px;
+    height:22px;
+    background: radial-gradient(circle at 50% 30%, #fff6d8, var(--gold) 55%, transparent 75%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: flicker 1.8s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+  @keyframes flicker{
+    0%,100%{ transform: translateX(-50%) scale(1) rotate(-1deg); }
+    50%{ transform: translateX(-50%) scale(1.08) rotate(2deg); }
+  }
+  .flame.out{ animation:none; opacity:0; transition: opacity 0.5s ease; }
+
+  .wish-hint{
+    margin-top: 3.2rem;
+    font-size:0.85rem;
+    color: var(--rose);
+    letter-spacing:0.02em;
+    cursor:pointer;
+  }
+
+  .wish-made{
+    margin-top:3.2rem;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.3rem;
+    color: var(--wine);
+    opacity:0;
+    transform: translateY(8px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .wish-made.show{ opacity:1; transform:translateY(0); }
+
+  /* confetti burst on wish */
+  .confetti-piece{
+    position:fixed;
+    top:50%; left:50%;
+    width:8px; height:14px;
+    z-index:5;
+    pointer-events:none;
+    opacity:0;
+  }
+
+  footer{
+    padding: 3rem 1.5rem 4rem;
+    text-align:center;
+    font-size:0.85rem;
+    color: var(--rose);
+    position:relative;
+    z-index:2;
+  }
+
+  @media (max-width:600px){
+    section{ padding: 4.5rem 1.2rem; min-height: auto; }
+    #hero{ min-height:100svh; padding-top: 3.5rem; padding-bottom: 3.5rem; }
+    .reason-row{ gap:1rem; }
+    .gallery-grid{ grid-template-columns: repeat(2, 1fr); gap:1rem; }
+    .flip-card{ height: 150px; }
+    .flip-face{ font-size:0.95rem; padding:0.8rem; }
+    .flip-front{ font-size:1.6rem; }
+    #meter button, .envelope, .flame{ touch-action: manipulation; }
+    #meter button{ padding: 0.9rem 2rem; }
+  }
+
+  @media (max-width:360px){
+    .gallery-grid{ grid-template-columns: 1fr 1fr; gap:0.8rem; }
+    .flip-card{ height: 130px; }
+    section{ padding: 3.5rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="petal-field"></div>
+
+<section id="hero">
+  <div class="hero-eyebrow">happy birthday</div>
+  <h1 class="hero-title">Sithmi</h1>
+  <div class="hero-sub">mage pana, today is all yours ✦</div>
+
+  <div class="envelope-wrap">
+    <div class="envelope" id="envelope">
+      <div class="letter"><p>To the girl who made today worth celebrating...</p></div>
+      <div class="envelope-shadow-flap"></div>
+      <div class="envelope-body"></div>
+      <div class="envelope-flap"></div>
+      <div class="envelope-seal">S</div>
+    </div>
+  </div>
+  <div class="envelope-hint">tap the envelope to open it</div>
+</section>
+
+<section id="message">
+  <h2 class="serif" style="font-size:2.2rem; margin-bottom:1.8rem;">A few words, just for you</h2>
+  <p>Sithmi, another year has gone by, and somehow you still manage to surprise me with how easily you make everything better just by being in it. The ordinary days feel lighter with you around, and the good ones feel unforgettable.</p>
+  <p>I hope today gives you even a small piece of the happiness you give everyone else without ever asking for anything back. You deserve to be celebrated, not just today, but always.</p>
+  <p>Here's to you, mage pana, and to another year of us.</p>
+  <div class="sign-off">— always yours</div>
+</section>
+
+<section id="reasons">
+  <div class="reasons-inner">
+    <h2 class="serif">A few reasons, out of many</h2>
+
+    <div class="reason-row">
+      <div class="reason-mark">i</div>
+      <div class="reason-text">The way you laugh at your own jokes before you've even finished telling them.</div>
+    </div>
+    <div class="reason-row">
+      <div class="reason-mark">ii</div>
+      <div class="reason-text">How you remember the small things I mention once, in passing, and bring them up weeks later.</div>
+    </div>
+    <div class="reason-row">
+      <div class="reason-mark">iii</div>
+      <div class="reason-text">Your patience with me on the days I don't deserve it.</div>
+    </div>
+    <div class="reason-row">
+      <div class="reason-mark">iv</div>
+      <div class="reason-text">The way a bad day quietly becomes a good one, just because you're there.</div>
+    </div>
+    <div class="reason-row">
+      <div class="reason-mark">v</div>
+      <div class="reason-text">Simply, that you're you — and that's more than enough.</div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <h2 class="serif">Moments, waiting to be filled</h2>
+  <div class="gallery-grid">
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-face flip-front">✦</div>
+        <div class="flip-face flip-back">our first photo goes here</div>
+      </div>
+    </div>
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-face flip-front">✦</div>
+        <div class="flip-face flip-back">that trip we still talk about</div>
+      </div>
+    </div>
+    <div class="flip-card">
+      <div class="flip-inner">
+        <div class="flip-face flip-front">✦</div>
+        <div class="flip-face flip-back">your favorite silly selfie</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="meter">
+  <h2 class="serif">How much, mage pana?</h2>
+  <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+  <div class="meter-label" id="meterLabel">press the button and find out</div>
+  <button id="meterBtn">measure it</button>
+</section>
+
+<section id="wish">
+  <h2 class="serif" style="font-size:2.2rem;">Make a wish</h2>
+  <div class="cake">
+    <div class="candle" id="candle">
+      <div class="flame" id="flame"></div>
+    </div>
+    <div class="cake-layer top"></div>
+    <div class="cake-layer"></div>
+    <div class="cake-plate"></div>
+  </div>
+  <div class="wish-hint" id="wishHint">tap the flame to blow out the candle</div>
+  <div class="wish-made" id="wishMade">Whatever you wished for, I hope it finds you.</div>
+</section>
+
+<footer>made with love, for the best person I know</footer>
+
+<script>
+  // Ambient petals — sparse (fewer on small screens for smoother scrolling)
+  const field = document.getElementById('petal-field');
+  const isSmallScreen = window.innerWidth < 600;
+  const petalCount = isSmallScreen ? 8 : 14;
+  for(let i=0;i<petalCount;i++){
+    const p = document.createElement('div');
+    p.className = 'petal';
+    const left = Math.random()*100;
+    const duration = 12 + Math.random()*10;
+    const delay = Math.random()*-20;
+    const size = 8 + Math.random()*10;
+    const hueShift = Math.random() > 0.5 ? '#f4d4d9' : '#e9b7c1';
+    p.style.left = left + 'vw';
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.background = hueShift;
+    p.style.animationDuration = duration + 's';
+    p.style.animationDelay = delay + 's';
+    field.appendChild(p);
+  }
+
+  // Ambient hearts — a second, slower layer behind the petals
+  const heartCount = isSmallScreen ? 6 : 10;
+  const heartSymbols = ['♥','❤'];
+  for(let i=0;i<heartCount;i++){
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = heartSymbols[Math.floor(Math.random()*heartSymbols.length)];
+    h.style.left = (Math.random()*100) + 'vw';
+    h.style.fontSize = (14 + Math.random()*14) + 'px';
+    h.style.animationDuration = (16 + Math.random()*12) + 's';
+    h.style.animationDelay = (Math.random()*-24) + 's';
+    field.appendChild(h);
+  }
+
+  // Cursor / touch sparkle trail — throttled, and lighter on touch so it never fights scrolling
+  let lastSpark = 0;
+  const sparkInterval = isSmallScreen ? 140 : 60;
+  function spawnSparkle(x, y){
+    const now = Date.now();
+    if(now - lastSpark < sparkInterval) return;
+    lastSpark = now;
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.textContent = Math.random() > 0.5 ? '✦' : '♥';
+    s.style.left = x + 'px';
+    s.style.top = y + 'px';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(), 900);
+  }
+  window.addEventListener('pointermove', (e) => spawnSparkle(e.clientX, e.clientY), { passive:true });
+
+  // Gallery: tap to flip on touch devices (hover already covers desktop)
+  document.querySelectorAll('.flip-card').forEach(card => {
+    card.addEventListener('click', () => card.classList.toggle('flipped'));
+  });
+
+  // Love meter
+  const meterFill = document.getElementById('meterFill');
+  const meterLabel = document.getElementById('meterLabel');
+  const meterBtn = document.getElementById('meterBtn');
+  meterBtn.addEventListener('click', () => {
+    meterFill.style.width = '100%';
+    meterLabel.textContent = 'measuring...';
+    meterBtn.disabled = true;
+    setTimeout(() => {
+      meterLabel.textContent = 'off the scale. always has been.';
+    }, 2200);
+  });
+
+  // Envelope open
+  const envelope = document.getElementById('envelope');
+  envelope.addEventListener('click', () => {
+    envelope.classList.toggle('open');
+  });
+
+  // Candle blow out + confetti
+  const flame = document.getElementById('flame');
+  const wishHint = document.getElementById('wishHint');
+  const wishMade = document.getElementById('wishMade');
+  let blown = false;
+
+  function burstConfetti(){
+    const colors = ['#a63a5a','#c9a15b','#f4d4d9','#5c2338'];
+    for(let i=0;i<28;i++){
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(c);
+      const angle = Math.random()*Math.PI*2;
+      const dist = 120 + Math.random()*220;
+      const x = Math.cos(angle)*dist;
+      const y = Math.sin(angle)*dist - 60;
+      const rot = Math.random()*540 - 270;
+      c.animate([
+        { transform:'translate(0,0) rotate(0deg)', opacity:1 },
+        { transform:`translate(${x}px, ${y}px) rotate(${rot}deg)`, opacity:0 }
+      ], { duration: 1100 + Math.random()*500, easing:'cubic-bezier(.2,.7,.3,1)', fill:'forwards' });
+      setTimeout(()=>c.remove(), 1700);
+    }
+  }
+
+  flame.addEventListener('click', () => {
+    if(blown) return;
+    blown = true;
+    flame.classList.add('out');
+    wishHint.style.opacity = '0';
+    burstConfetti();
+    setTimeout(()=>{ wishMade.classList.add('show'); }, 350);
+  });
+</script>
+
+</body>
+</html>
